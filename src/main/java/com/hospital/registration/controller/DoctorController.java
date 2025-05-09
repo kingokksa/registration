@@ -1,18 +1,17 @@
 package com.hospital.registration.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.hospital.registration.entity.Doctor;
+import com.hospital.registration.pojo.Doctor;
 import com.hospital.registration.service.DoctorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/doctors")
+@RequestMapping("/doctors")
 public class DoctorController {
-    private final DoctorService doctorService;
 
-    public DoctorController(DoctorService doctorService) {
-        this.doctorService = doctorService;
-    }
+    @Autowired
+    private DoctorService doctorService;
 
     @GetMapping
     public List<Doctor> list() {

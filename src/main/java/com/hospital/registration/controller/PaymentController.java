@@ -1,18 +1,17 @@
 package com.hospital.registration.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.hospital.registration.entity.Payment;
+import com.hospital.registration.pojo.Payment;
 import com.hospital.registration.service.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/payments")
 public class PaymentController {
-    private final PaymentService paymentService;
 
-    public PaymentController(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping
     public List<Payment> list() {

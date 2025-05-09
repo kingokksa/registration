@@ -1,18 +1,18 @@
 package com.hospital.registration.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.hospital.registration.entity.Department;
+import com.hospital.registration.pojo.Department;
 import com.hospital.registration.service.DepartmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@CrossOrigin // 允许跨域
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping("/departments")
 public class DepartmentController {
-    private final DepartmentService departmentService;
 
-    public DepartmentController(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
+    @Autowired
+    private DepartmentService departmentService;
 
     @GetMapping
     public List<Department> list() {

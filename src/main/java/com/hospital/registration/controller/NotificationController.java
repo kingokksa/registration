@@ -1,18 +1,17 @@
 package com.hospital.registration.controller;
 
-import org.springframework.web.bind.annotation.*;
-import com.hospital.registration.entity.Notification;
+import com.hospital.registration.pojo.Notification;
 import com.hospital.registration.service.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/notifications")
 public class NotificationController {
-    private final NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping
     public List<Notification> list() {
