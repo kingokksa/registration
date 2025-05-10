@@ -29,7 +29,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         // 公开接口
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/refresh").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/refresh", "/swagger-ui/**",
+                                "/swagger-ui.html", "/v3/api-docs/**")
+                        .permitAll()
                         .requestMatchers("/departments").permitAll()
                         .requestMatchers("/doctors").permitAll()
                         // 用户接口
