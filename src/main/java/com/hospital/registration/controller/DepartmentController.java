@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@CrossOrigin // 允许跨域
 @RestController
 @RequestMapping("/departments")
 public class DepartmentController {
