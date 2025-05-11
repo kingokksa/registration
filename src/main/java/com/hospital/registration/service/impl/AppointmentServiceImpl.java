@@ -11,12 +11,43 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appointment> implements AppointmentService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private AppointmentMapper appointmentMapper;
+
+    @Override
+    public Map<String, Object> getAppointmentDetails(Long appointmentId) {
+        return appointmentMapper.getAppointmentDetails(appointmentId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getPatientAppointmentsWithDetails(Long patientId) {
+        return appointmentMapper.getPatientAppointments(patientId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDoctorAppointmentsWithDetails(Long doctorId, Date startTime, Date endTime) {
+        return appointmentMapper.getDoctorAppointments(doctorId, startTime, endTime);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDepartmentAppointmentsWithDetails(Long departmentId) {
+        return appointmentMapper.getDepartmentAppointments(departmentId);
+    }
+
+    @Override
+    public Map<String, Object> getAppointmentStats(Date startDate, Date endDate) {
+        return appointmentMapper.getAppointmentStats(startDate, endDate);
+    }
 
     @Override
     public Map<String, Object> createAppointment(Appointment appointment) {
@@ -41,7 +72,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     public List<Appointment> getPatientAppointments(Long patientId) {
         QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq("patient_id", patientId)
-                .orderByDesc("appointment_date");
+                .orderByDesc("appointment_time");
         return list(wrapper);
     }
 
@@ -49,7 +80,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     public List<Appointment> getDoctorAppointments(Long doctorId) {
         QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq("doctor_id", doctorId)
-                .orderByDesc("appointment_date");
+                .orderByDesc("appointment_time");
         return list(wrapper);
     }
 
@@ -102,7 +133,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     public List<Appointment> getDepartmentAppointments(Long departmentId) {
         QueryWrapper<Appointment> wrapper = new QueryWrapper<>();
         wrapper.eq("department_id", departmentId)
-                .orderByDesc("appointment_date");
+                .orderByDesc("appointment_time");
         return list(wrapper);
     }
 }

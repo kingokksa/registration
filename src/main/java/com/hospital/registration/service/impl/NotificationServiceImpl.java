@@ -10,8 +10,9 @@ import com.hospital.registration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Date;
 
 @Service
 public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Notification>
@@ -20,11 +21,14 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Override
     public List<Notification> getSystemNotifications() {
         QueryWrapper<Notification> wrapper = new QueryWrapper<>();
-        wrapper.eq("notification_type", "SYSTEM")
-                .orderByDesc("created_at");
+        wrapper.eq("type", "SYSTEM")
+                .orderByDesc("create_time");
         return list(wrapper);
     }
 
@@ -34,22 +38,36 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         if (currentUser == null) {
             return List.of();
         }
+        return getUserNotifications(currentUser.getUserId());
+    }
 
+    @Override
+    public List<Notification> getUserNotifications(Long userId) {
         QueryWrapper<Notification> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", currentUser.getUserId())
-                .orderByDesc("created_at");
+        wrapper.eq("user_id", userId)
+                .orderByDesc("create_time");
         return list(wrapper);
     }
 
     @Override
-    public boolean markAsRead(Long id) {
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            return false;
-        }
+    public Map<String, Object> getNotificationDetails(Long notificationId) {
+        return notificationMapper.getNotificationDetails(notificationId);
+    }
 
+    @Override
+    public List<Map<String, Object>> getUserNotificationsWithDetails(Long userId) {
+        return notificationMapper.getUserNotifications(userId);
+    }
+
+    @Override
+    public Map<String, Object> getUserNotificationStats(Long userId) {
+        return notificationMapper.getUserNotificationStats(userId);
+    }
+
+    @Override
+    public boolean markAsRead(Long id) {
         Notification notification = getById(id);
-        if (notification == null || !notification.getUserId().equals(currentUser.getUserId())) {
+        if (notification == null) {
             return false;
         }
 
@@ -58,23 +76,41 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     }
 
     @Override
+    public void markAllAsRead(Long userId) {
+        QueryWrapper<Notification> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId)
+                .eq("is_read", false);
+
+        Notification update = new Notification();
+        update.setIsRead(true);
+        update(update, wrapper);
+    }
+
+    @Override
     public boolean sendSystemNotification(String message) {
         Notification notification = new Notification();
-        notification.setMessage(message);
-        notification.setNotificationType("SYSTEM");
+        notification.setContent(message);
+        notification.setType("SYSTEM");
         notification.setIsRead(false);
-        notification.setCreatedAt(LocalDateTime.now());
+        notification.setCreateTime(new Date());
         return save(notification);
     }
 
     @Override
     public boolean sendUserNotification(Long userId, String message, String type) {
+        return sendUserNotification(userId, message, type, null, null);
+    }
+
+    @Override
+    public boolean sendUserNotification(Long userId, String message, String type, Long relatedId, String relatedType) {
         Notification notification = new Notification();
         notification.setUserId(userId);
-        notification.setMessage(message);
-        notification.setNotificationType(type);
+        notification.setContent(message);
+        notification.setType(type);
+        notification.setRelatedId(relatedId);
+        notification.setRelatedType(relatedType);
         notification.setIsRead(false);
-        notification.setCreatedAt(LocalDateTime.now());
+        notification.setCreateTime(new Date());
         return save(notification);
     }
 }

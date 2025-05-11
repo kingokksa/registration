@@ -5,6 +5,7 @@ import com.hospital.registration.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/departments")
@@ -14,24 +15,27 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping
-    public List<Department> list() {
-        return departmentService.list();
+    public List<Map<String, Object>> list() {
+        List<Department> departments = departmentService.getAvailableDepartments();
+        return departments.stream()
+                .map(dept -> departmentService.getDepartmentDetails(dept.getDepartmentId()))
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Department get(@PathVariable Long id) {
-        return departmentService.getById(id);
+    public Map<String, Object> get(@PathVariable Long id) {
+        return departmentService.getDepartmentDetails(id);
     }
 
     @PostMapping
-    public boolean save(@RequestBody Department department) {
-        return departmentService.save(department);
+    public Map<String, Object> save(@RequestBody Department department) {
+        return departmentService.createDepartment(department);
     }
 
     @PutMapping("/{id}")
-    public boolean update(@PathVariable Long id, @RequestBody Department department) {
+    public Map<String, Object> update(@PathVariable Long id, @RequestBody Department department) {
         department.setDepartmentId(id);
-        return departmentService.updateById(department);
+        return departmentService.updateDepartment(department);
     }
 
     @DeleteMapping("/{id}")

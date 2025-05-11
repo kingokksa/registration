@@ -30,4 +30,9 @@ public interface DepartmentService extends IService<Department> {
      * 获取科室统计信息
      */
     Map<String, Object> getDepartmentStatistics();
+
+    /**
+     * 获取所有可用科室及其医生数量
+     */
+    List<Map<String, Object>> getAvailableDepartmentsWithDoctors();
 }

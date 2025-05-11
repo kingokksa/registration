@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,8 +17,10 @@ public class Notification {
     @TableId(value = "notification_id", type = IdType.AUTO)
     private Long notificationId;
     private Long userId;
-    private String message;
-    private String notificationType;
+    private String content;
+    private String type;
     private Boolean isRead;
-    private LocalDateTime createdAt;
+    private Date createTime;
+    private Long relatedId;
+    private String relatedType;
 }
