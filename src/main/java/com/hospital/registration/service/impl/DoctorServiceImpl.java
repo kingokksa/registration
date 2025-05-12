@@ -70,4 +70,11 @@ public class DoctorServiceImpl extends ServiceImpl<DoctorMapper, Doctor> impleme
         result.put("user", user);
         return result;
     }
+
+    @Override
+    public Doctor getByUserId(Long userId) {
+        QueryWrapper<Doctor> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
+        return getOne(wrapper);
+    }
 }

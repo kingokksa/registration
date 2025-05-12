@@ -30,4 +30,9 @@ public interface DoctorService extends IService<Doctor> {
      * 获取医生详细信息(包含用户信息)
      */
     Map<String, Object> getDoctorDetails(Long doctorId);
+
+    /**
+     * 根据用户ID获取医生信息
+     */
+    Doctor getByUserId(Long userId);
 }
