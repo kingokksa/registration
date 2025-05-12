@@ -3,7 +3,6 @@ package com.hospital.registration.controller;
 import com.hospital.registration.pojo.Appointment;
 import com.hospital.registration.pojo.User;
 import com.hospital.registration.pojo.Doctor;
-import com.hospital.registration.pojo.Department;
 import com.hospital.registration.pojo.Payment;
 import com.hospital.registration.dto.DiagnosisAppointmentDTO;
 import com.hospital.registration.service.AppointmentService;
@@ -16,17 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.math.BigDecimal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.math.BigDecimal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
 
 @RestController
 @RequestMapping("/appointments")
@@ -63,6 +51,7 @@ public class AppointmentController {
             dto.setPatientName(patient != null ? patient.getName() : "未知患者");
             dto.setDoctorName(doctorUser != null ? doctorUser.getName() : "未知医生");
             dto.setAmount(payment != null ? payment.getAmount() : BigDecimal.ZERO);
+            dto.setStatus(appointment.getStatus());
 
             diagnosisAppointmentDTOs.add(dto);
         }
@@ -105,6 +94,7 @@ public class AppointmentController {
             dto.setPatientName(patient != null ? patient.getName() : "未知患者");
             dto.setDoctorName(doctorUser != null ? doctorUser.getName() : "未知医生");
             dto.setAmount(payment != null ? payment.getAmount() : BigDecimal.ZERO);
+            dto.setStatus(appointment.getStatus());
 
             diagnosisAppointmentDTOs.add(dto);
         }

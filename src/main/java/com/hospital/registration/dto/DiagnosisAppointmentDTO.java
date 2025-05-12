@@ -1,26 +1,30 @@
 package com.hospital.registration.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class DiagnosisAppointmentDTO {
 
     private String doctorName;
-    private LocalDate appointmentDate;
+    private LocalDateTime appointmentDate;
     private Long appointmentId;
     private BigDecimal amount;
     private String patientName;
+    private String status;
 
     public DiagnosisAppointmentDTO() {
     }
 
-    public DiagnosisAppointmentDTO(String doctorName, LocalDate appointmentDate, Long appointmentId, BigDecimal amount,
-            String patientName) {
+    public DiagnosisAppointmentDTO(String doctorName, LocalDateTime appointmentDate, Long appointmentId,
+            BigDecimal amount,
+            String patientName, String status) {
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
         this.appointmentId = appointmentId;
         this.amount = amount;
         this.patientName = patientName;
+        this.status = status;
     }
 
     public String getDoctorName() {
@@ -31,11 +35,11 @@ public class DiagnosisAppointmentDTO {
         this.doctorName = doctorName;
     }
 
-    public LocalDate getAppointmentDate() {
+    public LocalDateTime getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(LocalDate appointmentDate) {
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 
@@ -61,5 +65,13 @@ public class DiagnosisAppointmentDTO {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

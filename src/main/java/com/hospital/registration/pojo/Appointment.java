@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +19,6 @@ public class Appointment {
     private Long patientId;
     private Long doctorId;
     private Long departmentId;
-    private LocalDate appointmentDate;
+    private LocalDateTime appointmentDate;
     private String status;
 }
