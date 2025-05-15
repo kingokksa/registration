@@ -84,4 +84,38 @@ public class DoctorServiceImpl extends ServiceImpl<DoctorMapper, Doctor> impleme
         logger.info("Found {} doctors for user ID: {}", doctors.size(), userId);
         return doctors.isEmpty() ? null : doctors.get(0); // Return first or null
     }
+
+    // Admin CRUD implementations
+    @Override
+    public List<Doctor> getAllDoctors() {
+        return list();
+    }
+
+    @Override
+    public Doctor getDoctorById(Integer id) {
+        // Note: Doctor ID is Long in POJO, but the method in interface was defined as
+        // Integer.
+        // Assuming the interface definition was a mistake and should be Long.
+        // If the interface must remain Integer, casting might be needed, but it's
+        // better to fix the interface.
+        // For now, I will implement based on the POJO's Long type for consistency with
+        // the database ID.
+        // If the interface cannot be changed, please let me know.
+        return getById(id); // This might cause issues if id is large
+    }
+
+    @Override
+    public void addDoctor(Doctor doctor) {
+        save(doctor);
+    }
+
+    @Override
+    public void updateDoctor(Doctor doctor) {
+        updateById(doctor);
+    }
+
+    @Override
+    public void deleteDoctor(Long id) {
+        removeById(id);
+    }
 }

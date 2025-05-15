@@ -2,6 +2,7 @@ package com.hospital.registration.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hospital.registration.pojo.User;
+import java.util.List;
 import java.util.Map;
 
 public interface UserService extends IService<User> {
@@ -27,4 +28,15 @@ public interface UserService extends IService<User> {
     User findByUsername(String username);
 
     User updateById(Integer id);
+
+    // Admin CRUD methods
+    List<User> getAllUsers();
+
+    User getUserById(Integer id);
+
+    void addUser(User user);
+
+    void updateUser(User user);
+
+    void deleteUser(Long id);
 }

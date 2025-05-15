@@ -3,6 +3,7 @@ package com.hospital.registration.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hospital.registration.pojo.Appointment;
 import java.util.List;
+import com.hospital.registration.dto.DiagnosisAppointmentDTO;
 import java.util.Map;
 
 public interface AppointmentService extends IService<Appointment> {
@@ -35,4 +36,15 @@ public interface AppointmentService extends IService<Appointment> {
      * 获取科室的预约列表
      */
     List<Appointment> getDepartmentAppointments(Long departmentId);
+
+    // Admin CRUD methods
+    List<DiagnosisAppointmentDTO> getAllDiagnosisAppointmentDTOs();
+
+    Appointment getAppointmentById(Integer id);
+
+    void addAppointment(Appointment appointment);
+
+    void updateAppointment(Appointment appointment);
+
+    void deleteAppointment(Long id);
 }

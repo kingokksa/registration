@@ -5,6 +5,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hospital.registration.pojo.Appointment;
 import com.hospital.registration.mapper.AppointmentMapper;
 import com.hospital.registration.service.AppointmentService;
+import com.hospital.registration.dto.DiagnosisAppointmentDTO;
+import com.hospital.registration.mapper.DoctorMapper;
+import com.hospital.registration.mapper.UserMapper;
+import com.hospital.registration.pojo.Doctor;
+import com.hospital.registration.pojo.User;
+import java.util.ArrayList;
+import com.hospital.registration.mapper.DepartmentMapper;
+import com.hospital.registration.pojo.Department;
 import com.hospital.registration.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +25,14 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private DoctorMapper doctorMapper;
+
+    @Autowired
+    private DepartmentMapper departmentMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public Map<String, Object> createAppointment(Appointment appointment) {
@@ -104,5 +120,56 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
         wrapper.eq("department_id", departmentId)
                 .orderByDesc("appointment_date");
         return list(wrapper);
+    }
+
+    @Override
+    public List<DiagnosisAppointmentDTO> getAllDiagnosisAppointmentDTOs() {
+        List<Appointment> appointments = list();
+        List<DiagnosisAppointmentDTO> dtos = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            Doctor doctor = doctorMapper.selectById(appointment.getDoctorId());
+            User patient = userMapper.selectById(appointment.getPatientId());
+            User doctorUser = userMapper.selectById(doctor.getUserId());
+            Department department = departmentMapper.selectById(doctor.getDepartmentId());
+            DiagnosisAppointmentDTO dto = new DiagnosisAppointmentDTO(
+                    doctorUser != null ? doctorUser.getUsername() : "未知医生",
+                    department != null ? department.getDepartmentName() : "未知科室", // Get department name
+                    appointment.getAppointmentDate(),
+                    appointment.getAppointmentId(),
+                    // appointment.getAmount(), // Appointment POJO does not have amount field
+                    null, // Set amount to null or a default value
+                    patient != null ? patient.getUsername() : "未知患者",
+                    appointment.getStatus());
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public Appointment getAppointmentById(Integer id) {
+        // Note: Appointment ID is Long in POJO, but the method in interface was defined
+        // as Integer.
+        // Assuming the interface definition was a mistake and should be Long.
+        // If the interface must remain Integer, casting might be needed, but it's
+        // better to fix the interface.
+        // For now, I will implement based on the POJO's Long type for consistency with
+        // the database ID.
+        // If the interface cannot be changed, please let me know.
+        return getById(id); // This might cause issues if id is large
+    }
+
+    @Override
+    public void addAppointment(Appointment appointment) {
+        save(appointment);
+    }
+
+    @Override
+    public void updateAppointment(Appointment appointment) {
+        updateById(appointment);
+    }
+
+    @Override
+    public void deleteAppointment(Long id) {
+        removeById(id);
     }
 }

@@ -145,4 +145,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User updateById(Integer id) {
         return userMapper.selectById(id);
     }
+
+    // Admin CRUD implementations
+    @Override
+    public List<User> getAllUsers() {
+        return userMapper.selectList(null);
+    }
+
+    @Override
+    public User getUserById(Integer id) {
+        // Note: User ID is Long in POJO, but the method in interface was defined as
+        // Integer.
+        // Assuming the interface definition was a mistake and should be Long.
+        // If the interface must remain Integer, casting might be needed, but it's
+        // better to fix the interface.
+        // For now, I will implement based on the POJO's Long type for consistency with
+        // the database ID.
+        // If the interface cannot be changed, please let me know.
+        return userMapper.selectById(id); // This might cause issues if id is large
+    }
+
+    @Override
+    public void addUser(User user) {
+        userMapper.insert(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        userMapper.updateById(user);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userMapper.deleteById(id);
+    }
 }

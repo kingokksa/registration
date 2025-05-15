@@ -35,4 +35,15 @@ public interface DoctorService extends IService<Doctor> {
      * 根据用户ID获取医生信息
      */
     Doctor getByUserId(Long userId);
+
+    // Admin CRUD methods
+    List<Doctor> getAllDoctors();
+
+    Doctor getDoctorById(Integer id);
+
+    void addDoctor(Doctor doctor);
+
+    void updateDoctor(Doctor doctor);
+
+    void deleteDoctor(Long id);
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public class DiagnosisAppointmentDTO {
 
     private String doctorName;
+    private String departmentName; // Added department name
     private LocalDateTime appointmentDate;
     private Long appointmentId;
     private BigDecimal amount;
@@ -16,10 +17,12 @@ public class DiagnosisAppointmentDTO {
     public DiagnosisAppointmentDTO() {
     }
 
-    public DiagnosisAppointmentDTO(String doctorName, LocalDateTime appointmentDate, Long appointmentId,
+    public DiagnosisAppointmentDTO(String doctorName, String departmentName, LocalDateTime appointmentDate,
+            Long appointmentId,
             BigDecimal amount,
             String patientName, String status) {
         this.doctorName = doctorName;
+        this.departmentName = departmentName;
         this.appointmentDate = appointmentDate;
         this.appointmentId = appointmentId;
         this.amount = amount;
@@ -33,6 +36,14 @@ public class DiagnosisAppointmentDTO {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public LocalDateTime getAppointmentDate() {
