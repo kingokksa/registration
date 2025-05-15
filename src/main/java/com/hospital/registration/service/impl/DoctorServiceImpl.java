@@ -9,6 +9,8 @@ import com.hospital.registration.service.DoctorService;
 import com.hospital.registration.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Map;
 
 @Service
 public class DoctorServiceImpl extends ServiceImpl<DoctorMapper, Doctor> implements DoctorService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -73,8 +77,11 @@ public class DoctorServiceImpl extends ServiceImpl<DoctorMapper, Doctor> impleme
 
     @Override
     public Doctor getByUserId(Long userId) {
+        logger.info("Querying Doctor by user ID: {}", userId);
         QueryWrapper<Doctor> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
-        return getOne(wrapper);
+        List<Doctor> doctors = list(wrapper); // Use list to check size
+        logger.info("Found {} doctors for user ID: {}", doctors.size(), userId);
+        return doctors.isEmpty() ? null : doctors.get(0); // Return first or null
     }
 }

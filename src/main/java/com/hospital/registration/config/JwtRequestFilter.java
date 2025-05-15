@@ -41,8 +41,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtTokenUtil.validateToken(jwtToken)) {
                 String role = jwtTokenUtil.getRoleFromToken(jwtToken);
+                // 同时添加原始角色和带ROLE_前缀的角色
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        username, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+                        username, null, List.of(
+                                new SimpleGrantedAuthority(role),
+                                new SimpleGrantedAuthority("ROLE_" + role.toUpperCase())));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

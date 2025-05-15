@@ -1,8 +1,11 @@
 package com.hospital.registration.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hospital.registration.pojo.User;
+import com.hospital.registration.pojo.Doctor; // 导入 Doctor 类
 import com.hospital.registration.mapper.UserMapper;
+import com.hospital.registration.mapper.DoctorMapper; // 导入 DoctorMapper
 import com.hospital.registration.service.UserService;
 import com.hospital.registration.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +14,17 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List; // 导入 List
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private DoctorMapper doctorMapper; // 注入 DoctorMapper
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -32,6 +40,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             result.put("message", "登录成功");
             result.put("token", token);
             result.put("user", user);
+            QueryWrapper<Doctor> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", user.getUserId());
+            Doctor doctor = doctorMapper.selectOne(wrapper);
+            if (doctor != null) {
+                result.put("doctorId", doctor.getDoctorId());
+            }
+
         } else {
             result.put("success", false);
             result.put("message", "用户名或密码错误");

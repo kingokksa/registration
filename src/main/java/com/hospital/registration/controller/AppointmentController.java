@@ -102,6 +102,32 @@ public class AppointmentController {
         return diagnosisAppointmentDTOs;
     }
 
+    @GetMapping("/{id}")
+    public DiagnosisAppointmentDTO get(@PathVariable Long id) {
+        Appointment appointment = appointmentService.getById(id);
+        if (appointment == null) {
+            return null; // 或者返回适当的错误响应
+        }
+
+        User patient = userService.getById(appointment.getPatientId());
+        Doctor doctor = doctorService.getById(appointment.getDoctorId());
+        User doctorUser = null;
+        if (doctor != null) {
+            doctorUser = userService.getById(doctor.getUserId());
+        }
+        Payment payment = paymentService.getAppointmentPayment(appointment.getAppointmentId());
+
+        DiagnosisAppointmentDTO dto = new DiagnosisAppointmentDTO();
+        dto.setAppointmentId(appointment.getAppointmentId());
+        dto.setAppointmentDate(appointment.getAppointmentDate());
+        dto.setPatientName(patient != null ? patient.getName() : "未知患者");
+        dto.setDoctorName(doctorUser != null ? doctorUser.getName() : "未知医生");
+        dto.setAmount(payment != null ? payment.getAmount() : BigDecimal.ZERO);
+        dto.setStatus(appointment.getStatus());
+
+        return dto;
+    }
+
     @PostMapping
     public boolean save(@RequestBody Appointment appointment) {
         return appointmentService.save(appointment);

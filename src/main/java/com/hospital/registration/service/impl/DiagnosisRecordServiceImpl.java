@@ -37,14 +37,14 @@ public class DiagnosisRecordServiceImpl extends ServiceImpl<DiagnosisRecordMappe
             // 更新预约状态
             Appointment appointment = appointmentService.getById(record.getAppointmentId());
             if (appointment != null) {
-                appointment.setStatus("COMPLETED");
+                appointment.setStatus("confirmed");
                 appointmentService.updateById(appointment);
 
-                // 发送通知
-                notificationService.sendUserNotification(
-                        record.getPatientId(),
-                        "您的诊断记录已创建",
-                        "DIAGNOSIS");
+                // // 发送通知
+                // notificationService.sendUserNotification(
+                // record.getPatientId(),
+                // "您的诊断记录已创建",
+                // "DIAGNOSIS");
             }
         }
 
