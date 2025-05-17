@@ -35,4 +35,9 @@ public interface PaymentService extends IService<Payment> {
      * 获取支付统计
      */
     Map<String, Object> getPaymentStatistics();
+
+    /**
+     * 模拟支付处理
+     */
+    boolean processPayment(Payment payment);
 }

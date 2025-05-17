@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import com.hospital.registration.mapper.DepartmentMapper;
 import com.hospital.registration.pojo.Department;
 import com.hospital.registration.service.NotificationService;
+import com.hospital.registration.pojo.Payment;
+import com.hospital.registration.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,10 +36,22 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @Override
     public Map<String, Object> createAppointment(Appointment appointment) {
         boolean success = save(appointment);
         if (success) {
+            // 创建支付记录
+            Payment payment = new Payment();
+            payment.setAppointmentId(appointment.getAppointmentId());
+            // 这里需要设置支付金额，您可以根据实际情况获取，例如从医生或科室信息中获取挂号费
+            // 为了简单模拟，这里先设置为一个固定值
+            payment.setAmount(java.math.BigDecimal.valueOf(100.00)); // 示例金额
+            payment.setPaymentMethod("待选择"); // 示例支付方式
+            paymentService.createPayment(payment);
+
             // 发送通知给医生和患者
             notificationService.sendUserNotification(
                     appointment.getDoctorId(),
@@ -45,7 +59,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
                     "APPOINTMENT");
             notificationService.sendUserNotification(
                     appointment.getPatientId(),
-                    "预约创建成功",
+                    "预约创建成功，请及时支付",
                     "APPOINTMENT");
         }
         return Map.of(

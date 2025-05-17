@@ -31,12 +31,18 @@ public class DiagnosisRecordServiceImpl extends ServiceImpl<DiagnosisRecordMappe
     @Transactional
     public Map<String, Object> createDiagnosisRecord(DiagnosisRecord record) {
         record.setCreatedAt(LocalDateTime.now());
-        boolean success = save(record);
 
-        if (success) {
-            // 更新预约状态
-            Appointment appointment = appointmentService.getById(record.getAppointmentId());
-            if (appointment != null) {
+        // 根据 appointmentId 获取预约信息
+        Appointment appointment = appointmentService.getById(record.getAppointmentId());
+
+        if (appointment != null) {
+            // 设置 patientId
+            record.setPatientId(appointment.getPatientId());
+
+            boolean success = save(record);
+
+            if (success) {
+                // 更新预约状态
                 appointment.setStatus("confirmed");
                 appointmentService.updateById(appointment);
 
@@ -46,11 +52,15 @@ public class DiagnosisRecordServiceImpl extends ServiceImpl<DiagnosisRecordMappe
                 // "您的诊断记录已创建",
                 // "DIAGNOSIS");
             }
-        }
 
-        return Map.of(
-                "success", success,
-                "message", success ? "诊断记录创建成功" : "诊断记录创建失败");
+            return Map.of(
+                    "success", success,
+                    "message", success ? "诊断记录创建成功" : "诊断记录创建失败");
+        } else {
+            return Map.of(
+                    "success", false,
+                    "message", "未找到对应的预约信息");
+        }
     }
 
     @Override

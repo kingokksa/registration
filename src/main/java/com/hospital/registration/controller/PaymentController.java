@@ -51,4 +51,13 @@ public class PaymentController {
                 "success", paymentService.removeById(id),
                 "message", "支付记录删除成功"));
     }
+
+    @PostMapping("/process")
+    public ResponseEntity<Map<String, Object>> processPayment(@RequestBody Payment payment) {
+        boolean success = paymentService.processPayment(payment);
+        String message = success ? "支付成功" : "支付失败";
+        return ResponseEntity.ok(Map.of(
+                "success", success,
+                "message", message));
+    }
 }
